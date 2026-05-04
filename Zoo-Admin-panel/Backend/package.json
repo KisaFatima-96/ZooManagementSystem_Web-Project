@@ -1,7 +1,7 @@
 "homepage": "https://kisafatima-96.github.io/ZooManagementSystem_Web-Project",
 "scripts": {
   "predeploy": "npm run build",
-  "deploy": "gh-pages -d build"
+  "deploy": "gh-pages -d dist"
 }
 
 {
