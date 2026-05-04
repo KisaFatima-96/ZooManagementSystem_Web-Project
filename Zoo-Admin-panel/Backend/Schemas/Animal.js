@@ -5,7 +5,7 @@ const AnimalSchema = new mongoose.Schema({
     species: { type: String, required: true },
     age: { type: Number, required: true },
     gender: { type: String },
-    enclosure: { type: String, required: true },
+    enclosure: { type: String },
     description: { type: String },
     image: { type: String },
     assignedTo: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }, // Assigned staff

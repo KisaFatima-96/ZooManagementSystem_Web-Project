@@ -9,6 +9,8 @@ import Documents from './pages/Documents';
 import Chatbot from './pages/Chatbot';
 import Login from './pages/Login';
 
+import Weather from './pages/Weather';
+
 const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem('token');
   const role = localStorage.getItem('role');
@@ -27,7 +29,7 @@ const App = () => {
         <Route path="/payments" element={<ProtectedRoute><Payments /></ProtectedRoute>} />
         <Route path="/documents" element={<ProtectedRoute><Documents /></ProtectedRoute>} />
         <Route path="/chatbot" element={<ProtectedRoute><Chatbot /></ProtectedRoute>} />
-        <Route path="/weather" element={<ProtectedRoute><div className="card text-center py-20 text-gray-400 font-bold">Comprehensive Weather Analytics Module Under Construction</div></ProtectedRoute>} />
+        <Route path="/weather" element={<ProtectedRoute><Weather /></ProtectedRoute>} />
       </Routes>
     </Router>
   );
