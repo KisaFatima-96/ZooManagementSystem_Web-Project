@@ -155,11 +155,21 @@ const AnimalManagement = () => {
             <form onSubmit={handleAddAnimal} className="space-y-4">
               <div className="space-y-1">
                 <label className="text-xs font-black text-gray-400 ml-4 uppercase">Name</label>
-                <input required type="text" className="w-full border-2 border-gray-100 rounded-2xl px-6 py-4 focus:border-primary outline-none transition-colors font-bold" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} />
+                <input required type="text" className="w-full border-2 border-gray-100 rounded-2xl px-6 py-4 focus:border-primary outline-none transition-colors font-bold" value={formData.name} onChange={e => {
+                  const val = e.target.value;
+                  if (val === '' || /^[a-zA-Z\s]+$/.test(val)) {
+                    setFormData({...formData, name: val});
+                  }
+                }} />
               </div>
               <div className="space-y-1">
                 <label className="text-xs font-black text-gray-400 ml-4 uppercase">Species</label>
-                <input required type="text" className="w-full border-2 border-gray-100 rounded-2xl px-6 py-4 focus:border-primary outline-none transition-colors font-bold" value={formData.species} onChange={e => setFormData({...formData, species: e.target.value})} />
+                <input required type="text" className="w-full border-2 border-gray-100 rounded-2xl px-6 py-4 focus:border-primary outline-none transition-colors font-bold" value={formData.species} onChange={e => {
+                  const val = e.target.value;
+                  if (val === '' || /^[a-zA-Z\s]+$/.test(val)) {
+                    setFormData({...formData, species: val});
+                  }
+                }} />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">

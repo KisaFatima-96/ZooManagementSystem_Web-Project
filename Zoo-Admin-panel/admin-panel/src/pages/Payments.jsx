@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { CreditCard, Plus, Filter, TrendingDown, TrendingUp, DollarSign } from 'lucide-react';
+import api from '../services/api';
 
 const Payments = () => {
   const [payments, setPayments] = useState([]);
@@ -7,18 +8,40 @@ const Payments = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({ description: '', amount: '', type: 'Expense', category: '' });
 
+  const fetchPayments = async () => {
+    try {
+      const res = await api.get('/payments');
+      setPayments(res.data);
+    } catch (err) {
+      console.error("Error fetching payments", err);
+    }
+  };
+
   useEffect(() => {
-    setPayments([
-      { _id: '1', description: 'Animal Feed Purchase', amount: 1200, type: 'Expense', category: 'Food', date: '2024-04-25' },
-      { _id: '2', description: 'Ticket Sales', amount: 4500, type: 'Income', category: 'Sales', date: '2024-04-24' },
-      { _id: '3', description: 'Medical Supplies', amount: 800, type: 'Expense', category: 'Medical', date: '2024-04-23' },
-    ]);
+    fetchPayments();
   }, []);
 
   const totalIncome = payments.filter(p => p.type === 'Income').reduce((sum, p) => sum + p.amount, 0);
   const totalExpense = payments.filter(p => p.type === 'Expense').reduce((sum, p) => sum + p.amount, 0);
 
   const filteredPayments = payments.filter(p => filterType === 'All' || p.type === filterType);
+
+  const handleRecordTransaction = async (e) => {
+    e.preventDefault();
+    try {
+        await api.post('/payments', {
+            ...formData,
+            amount: Number(formData.amount),
+            date: new Date().toISOString()
+        });
+        fetchPayments();
+        setIsModalOpen(false);
+        setFormData({ description: '', amount: '', type: 'Expense', category: '' });
+    } catch (err) {
+        console.error("Error recording payment", err);
+        alert("Failed to record transaction");
+    }
+  };
 
   return (
     <div className="space-y-8">
@@ -79,7 +102,7 @@ const Payments = () => {
               </div>
               <div>
                 <h4 className="font-black text-gray-800">{p.description}</h4>
-                <p className="text-sm text-gray-400 font-medium">{p.date} • {p.category}</p>
+                <p className="text-sm text-gray-400 font-medium">{new Date(p.date).toLocaleDateString()} • {p.category}</p>
               </div>
             </div>
             <div className={`text-2xl font-black ${p.type === 'Income' ? 'text-green-500' : 'text-red-500'}`}>
@@ -87,6 +110,9 @@ const Payments = () => {
             </div>
           </div>
         ))}
+        {filteredPayments.length === 0 && (
+            <div className="text-center py-10 text-gray-400 font-bold">No financial records found.</div>
+        )}
       </div>
 
       {isModalOpen && (
@@ -95,7 +121,7 @@ const Payments = () => {
             <h3 className="text-2xl font-black mb-8 flex items-center gap-3">
               <CreditCard className="text-primary" /> New Transaction
             </h3>
-            <form onSubmit={(e) => { e.preventDefault(); setPayments([...payments, {...formData, _id: Date.now().toString(), date: new Date().toISOString().split('T')[0]}]); setIsModalOpen(false); }} className="space-y-5">
+            <form onSubmit={handleRecordTransaction} className="space-y-5">
               <div className="space-y-1">
                 <label className="text-xs font-black text-gray-400 ml-4 uppercase">Description</label>
                 <input required type="text" className="w-full border-2 border-gray-100 rounded-2xl px-6 py-4 focus:border-primary outline-none transition-colors font-bold" value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} />
@@ -103,7 +129,7 @@ const Payments = () => {
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
                   <label className="text-xs font-black text-gray-400 ml-4 uppercase">Amount ($)</label>
-                  <input required type="number" className="w-full border-2 border-gray-100 rounded-2xl px-6 py-4 focus:border-primary outline-none transition-colors font-bold" value={formData.amount} onChange={e => setFormData({...formData, amount: parseInt(e.target.value)})} />
+                  <input required type="number" className="w-full border-2 border-gray-100 rounded-2xl px-6 py-4 focus:border-primary outline-none transition-colors font-bold" value={formData.amount} onChange={e => setFormData({...formData, amount: e.target.value})} />
                 </div>
                 <div className="space-y-1">
                   <label className="text-xs font-black text-gray-400 ml-4 uppercase">Type</label>

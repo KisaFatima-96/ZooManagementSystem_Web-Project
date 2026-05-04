@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { PawPrint, Lock, Mail } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const Login = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -12,7 +14,7 @@ const Login = () => {
         const res = await axios.post('http://localhost:5000/api/auth/login', { email, password });
         localStorage.setItem('token', res.data.token);
         localStorage.setItem('role', res.data.user.role);
-        window.location.href = '/';
+        navigate('/');
     } catch (err) {
         alert('Login failed: ' + (err.response?.data?.message || err.message));
     }

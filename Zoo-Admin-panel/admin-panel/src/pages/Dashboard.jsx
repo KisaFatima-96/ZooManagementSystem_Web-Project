@@ -9,17 +9,39 @@ const Dashboard = () => {
 
   useEffect(() => {
     const fetchWeather = async () => {
-      try {
-        const res = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=Lahore&appid=895284fb053c0384a13e5476a2653a45&units=metric`);
-        setWeather(res.data);
-      } catch (err) {
-        console.error("Weather API error, using fallback data", err);
-        // Fallback data so the UI doesn't get stuck if the API key is invalid
-        setWeather({
-          main: { temp: 28, humidity: 45 },
-          weather: [{ description: "sunny with occasional clouds" }],
-          wind: { speed: 3.5 }
-        });
+      const API_KEY = '895284fb053c0384a13e5476a2653a45';
+      const fallbackUrl = `https://api.openweathermap.org/data/2.5/weather?q=Lahore&appid=${API_KEY}&units=metric`;
+
+      const getWeatherByCoords = async (lat, lon) => {
+        try {
+          const res = await axios.get(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`);
+          setWeather(res.data);
+        } catch (err) {
+          fetchFallback();
+        }
+      };
+
+      const fetchFallback = async () => {
+        try {
+          const res = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=Lahore&appid=${API_KEY}&units=metric`);
+          setWeather(res.data);
+        } catch (err) {
+          setWeather({
+            main: { temp: 28, humidity: 45 },
+            weather: [{ description: "sunny with occasional clouds" }],
+            wind: { speed: 3.5 },
+            name: "Lahore"
+          });
+        }
+      };
+
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => getWeatherByCoords(position.coords.latitude, position.coords.longitude),
+          () => fetchFallback()
+        );
+      } else {
+        fetchFallback();
       }
     };
 

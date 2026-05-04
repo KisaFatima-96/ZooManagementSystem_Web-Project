@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { 
   LayoutDashboard, 
   Users, 
@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 
 const Sidebar = () => {
+  const navigate = useNavigate();
   const navItems = [
     { name: 'Dashboard', path: '/', icon: <LayoutDashboard size={20} /> },
     { name: 'Staff', path: '/staff', icon: <Users size={20} /> },
@@ -51,7 +52,7 @@ const Sidebar = () => {
       </nav>
       <div className="p-6">
         <button 
-            onClick={() => { localStorage.clear(); window.location.href='/login'; }}
+            onClick={() => { localStorage.clear(); navigate('/login'); }}
             className="w-full flex items-center justify-center gap-4 px-6 py-4 bg-red-500/20 hover:bg-red-500 text-red-200 hover:text-white rounded-2xl transition-all duration-300 font-bold border border-red-500/30"
         >
             <LogOut size={20} />

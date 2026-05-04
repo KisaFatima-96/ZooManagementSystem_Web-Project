@@ -12,17 +12,17 @@ async function createAdmin(email, password, name) {
     // Check if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      console.log('User already exists! Updating role to admin...');
+      console.log('User already exists! Updating role and password...');
       existingUser.role = 'admin';
+      existingUser.password = password; // This will trigger the pre-save hash hook
       await existingUser.save();
-      console.log('User updated to Admin successfully.');
+      console.log('User updated successfully.');
     } else {
       // Create new admin
-      const hashedPassword = await bcrypt.hash(password, 10);
       const newAdmin = new User({
         name,
         email,
-        password: hashedPassword,
+        password,
         role: 'admin'
       });
       await newAdmin.save();
