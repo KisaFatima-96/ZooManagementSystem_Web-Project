@@ -1,22 +1,19 @@
 {
-  "name": "zoo-admin-panel",
-  "private": true,
+  "name": "zoo-backend",
   "version": "1.0.0",
-  "type": "module",
-  "homepage": "https://kisafatima-96.github.io/ZooManagementSystem_Web-Project",
+  "description": "Backend for Zoo Management System",
+  "main": "server.js",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview",
-    "deploy": "gh-pages -d dist"
+    "start": "node server.js",
+    "dev": "node server.js"
   },
   "dependencies": {
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0"
-  },
-  "devDependencies": {
-    "vite": "^5.0.0",
-    "@vitejs/plugin-react": "^4.0.0",
-    "gh-pages": "^6.0.0"
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.0.0",
+    "multer": "^1.4.5-lts.1"
   }
 }
