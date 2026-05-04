@@ -1,3 +1,9 @@
+"homepage": "https://kisafatima-96.github.io/ZooManagementSystem_Web-Project",
+"scripts": {
+  "predeploy": "npm run build",
+  "deploy": "gh-pages -d build"
+}
+
 {
   "name": "backend",
   "version": "1.0.0",
